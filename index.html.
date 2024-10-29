@@ -21,7 +21,7 @@
 
     <script>
         function sendCommand(endpoint) {
-           fetch(`https://ab-rob.herokuapp.com${endpoint}`, {
+            fetch(`https://f6d44020-f842-405e-a1ce-949d40c1be81-00-3nnnox54xsikb.spock.replit.dev${endpoint}`, {
                 method: 'POST'
             })
             .then(response => response.text())

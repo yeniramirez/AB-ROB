@@ -1,33 +1,72 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Robot Control Interface</title>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
-        button { margin: 10px; padding: 15px; font-size: 18px; }
-    </style>
-</head>
-<body>
-    <h1>Robot Control Interface</h1>
-    <button onclick="sendCommand('/start')">Start</button>
-    <button onclick="sendCommand('/stop')">Stop</button>
-    <button onclick="sendCommand('/move-forward')">Forward ↑</button>
-    <button onclick="sendCommand('/move-backward')">Backward ↓</button>
-    <button onclick="sendCommand('/move-right')">Right →</button>
-    <button onclick="sendCommand('/move-left')">Left ←</button>
-    <button onclick="sendCommand('/rotate')">Rotate ↻</button>
+import tkinter as tk
+import time
+import serial
 
-    <script>
-        function sendCommand(endpoint) {
-           fetch(`https://ab-rob.herokuapp.com${endpoint}`, {
-                method: 'POST'
-            })
-            .then(response => response.text())
-            .then(data => console.log(data))
-            .catch(error => console.error('Error:', error));
-        }
-    </script>
-</body>
-</html>
+# Conexión con Arduino (ajusta el puerto y la velocidad según tu configuración)
+arduino = serial.Serial('COM3', 9600)  # Cambia 'COM3' al puerto correcto en tu computadora
+
+# Funciones para cada movimiento
+def adelante():
+    arduino.write(b'F')
+    status_label.config(text="B.R.O.B. se mueve hacia adelante")
+
+def atras():
+    arduino.write(b'B')
+    status_label.config(text="B.R.O.B. se mueve hacia atrás")
+
+def derecha():
+    arduino.write(b'R')
+    status_label.config(text="B.R.O.B. se mueve a la derecha")
+
+def izquierda():
+    arduino.write(b'L')
+    status_label.config(text="B.R.O.B. se mueve a la izquierda")
+
+def diagonal_ad_der():
+    arduino.write(b'FR')
+    status_label.config(text="B.R.O.B. se mueve en diagonal adelante-derecha")
+
+def diagonal_ad_izq():
+    arduino.write(b'FL')
+    status_label.config(text="B.R.O.B. se mueve en diagonal adelante-izquierda")
+
+def diagonal_atras_der():
+    arduino.write(b'BR')
+    status_label.config(text="B.R.O.B. se mueve en diagonal atrás-derecha")
+
+def diagonal_atras_izq():
+    arduino.write(b'BL')
+    status_label.config(text="B.R.O.B. se mueve en diagonal atrás-izquierda")
+
+def giro_horario():
+    arduino.write(b'CW')
+    status_label.config(text="B.R.O.B. gira en sentido horario")
+
+def giro_antihorario():
+    arduino.write(b'CCW')
+    status_label.config(text="B.R.O.B. gira en sentido antihorario")
+
+def encender():
+    arduino.write(b'ON')
+    status_label.config(text="B.R.O.B. encendido")
+
+def apagar():
+    arduino.write(b'OFF')
+    status_label.config(text="B.R.O.B. apagado")
+
+def pausar():
+    arduino.write(b'PAUSE')
+    status_label.config(text="B.R.O.B. en pausa")
+
+# Configuración de la ventana principal
+ventana = tk.Tk()
+ventana.title("Control de B.R.O.B.")
+ventana.geometry("400x500")
+
+# Etiqueta de estado
+status_label = tk.Label(ventana, text="Estado: Inactivo", font=("Arial", 12))
+status_label.pack(pady=10)
+
+# Botones de control
+boton_encender = tk.Button(ventana, text="Encender", command=encender, width=15, height=2)
+boton_encender.pack(pady=5
